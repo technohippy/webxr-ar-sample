@@ -36,6 +36,7 @@
 				container.appendChild( renderer.domElement );
 
 				document.body.appendChild( ARButton.createButton( renderer ) );
+                alert(document.body)
 
 				// model
 
@@ -44,8 +45,7 @@
 				scene.add( light );
 
 				function onSelectEnd() {
-					this.userData.isSelecting = false;
-
+					this.userData.isSelecting = true;
 				}
 
 				controller = renderer.xr.getController( 0 );
