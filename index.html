@@ -9,7 +9,7 @@
 	<body>
 
 		<div id="info">
-			<a href="https://threejs.org" target="_blank" rel="noopener">three.js</a> ar - paint
+			<a href="https://threejs.org" target="_blank" rel="noopener">three.js</a> ar
 		</div>
 
 		<script type="module">
@@ -64,7 +64,7 @@
 
 				controller = renderer.xr.getController( 0 );
 				controller.addEventListener( 'selectend', onSelectEnd );
-				//scene.add( controller );
+				scene.add( controller );
 
 				window.addEventListener( 'resize', onWindowResize, false );
 
