@@ -51,6 +51,21 @@
 				controller.addEventListener( 'selectend', onSelectEnd );
 				scene.add( controller );
 
+
+
+                const geometry = new THREE.SphereGeometry(0.1, 32, 32)
+                //const material = new THREE.MeshBasicMaterial({color: 0xffff00})
+                const material = new MeshStandardMaterial( {
+                    roughness: 0.9,
+                    metalness: 0.0
+                } );
+                const mesh = new THREE.Mesh(geometry, material);
+	            mesh.frustumCulled = false;
+                scene.add(mesh)
+
+
+
+
 				window.addEventListener( 'resize', onWindowResize, false );
 			}
 
@@ -64,6 +79,7 @@
                 if (!controller.userData.isSelecting) return;
 
                 const center = new THREE.Vector3( 0, 0, - 0.2 ).applyMatrix4( controller.matrixWorld );
+                /*
                 const geometry = new THREE.SphereGeometry(0.1, 32, 32)
                 //const material = new THREE.MeshBasicMaterial({color: 0xffff00})
                 const material = new MeshStandardMaterial( {
@@ -71,9 +87,10 @@
                     metalness: 0.0
                 } );
                 const mesh = new THREE.Mesh(geometry, material);
-                mesh.position.set(center)
 	            mesh.frustumCulled = false;
                 scene.add(mesh)
+                */
+                mesh.position.set(center)
 
                 controller.userData.isSelecting = false
 			}
