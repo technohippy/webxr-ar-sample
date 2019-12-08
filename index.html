@@ -32,12 +32,10 @@
 				renderer = new THREE.WebGLRenderer( { antialias: true, alpha: true } );
 				renderer.setPixelRatio( window.devicePixelRatio );
 				renderer.setSize( window.innerWidth, window.innerHeight );
-                alert(renderer.xr)
 				renderer.xr.enabled = true;
 				container.appendChild( renderer.domElement );
 
 				document.body.appendChild( ARButton.createButton( renderer ) );
-                alert(document.body)
 
 				// model
 
@@ -78,7 +76,7 @@
 			}
 
 			function render() {
-				//handleController( controller );
+				handleController( controller );
 				renderer.render( scene, camera );
 			}
 		</script>
