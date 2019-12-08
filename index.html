@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>three.js ar</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+		<link type="text/css" rel="stylesheet" href="main.css">
+	</head>
+	<body>
+
+		<div id="info">
+			<a href="https://threejs.org" target="_blank" rel="noopener">three.js</a> ar - paint
+		</div>
+
+		<script type="module">
+
+			import * as THREE from './jsm/three.module.js';
+			import { ARButton } from './jsm/ARButton.js';
+
+			var container;
+			var camera, scene, renderer;
+			var controller
+
+			var up = new THREE.Vector3( 0, 1, 0 );
+
+			init();
+			animate();
+
+			function init() {
+
+				container = document.createElement( 'div' );
+				document.body.appendChild( container );
+
+				var info = document.createElement( 'div' );
+				info.style.position = 'absolute';
+				info.style.top = '10px';
+				info.style.width = '100%';
+				info.style.textAlign = 'center';
+				info.innerHTML = '<a href="https://threejs.org" target="_blank" rel="noopener">three.js</a> ar - paint<br/>Enable chrome://flags/#webxr-ar-module<br/>(Chrome 80+)';
+				container.appendChild( info );
+
+				scene = new THREE.Scene();
+
+				camera = new THREE.PerspectiveCamera( 70, window.innerWidth / window.innerHeight, 0.01, 20 );
+
+				renderer = new THREE.WebGLRenderer( { antialias: true, alpha: true } );
+				renderer.setPixelRatio( window.devicePixelRatio );
+				renderer.setSize( window.innerWidth, window.innerHeight );
+				renderer.xr.enabled = true;
+				container.appendChild( renderer.domElement );
+
+				document.body.appendChild( ARButton.createButton( renderer ) );
+
+				// model
+
+				var light = new THREE.HemisphereLight( 0xffffff, 0xbbbbff, 1 );
+				light.position.set( 0, 1, 0 );
+				scene.add( light );
+
+				function onSelectEnd() {
+					this.userData.isSelecting = false;
+
+				}
+
+				controller = renderer.xr.getController( 0 );
+				controller.addEventListener( 'selectend', onSelectEnd );
+				//scene.add( controller );
+
+				window.addEventListener( 'resize', onWindowResize, false );
+
+			}
+
+			function onWindowResize() {
+
+				camera.aspect = window.innerWidth / window.innerHeight;
+				camera.updateProjectionMatrix();
+
+				renderer.setSize( window.innerWidth, window.innerHeight );
+
+			}
+
+			//
+
+			function handleController( controller ) {
+                if (!controller.userData.isSelecting) return;
+
+                const center = new THREE.Vector3( 0, 0, - 0.2 ).applyMatrix4( controller.matrixWorld );
+                const mesh = new THREE.Mesh(new THREE.SphereGeometry(5, 32, 32), new THREE.MeshBasicMaterial({color: 0xffff00}));
+                mesh.position.set(center)
+                scene.add(mesh)
+
+                controller.userData.isSelecting = false
+			}
+
+			function animate() {
+
+				renderer.setAnimationLoop( render );
+
+			}
+
+			function render() {
+
+				handleController( controller );
+
+				renderer.render( scene, camera );
+
+			}
+
+		</script>
+	</body>
+</html>
