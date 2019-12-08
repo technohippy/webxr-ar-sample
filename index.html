@@ -71,6 +71,7 @@
                     metalness: 0.0
                 } );
                 const mesh = new THREE.Mesh(geometry, material);
+                alert(center)
                 mesh.position.set(center)
 	            mesh.frustumCulled = false;
                 scene.add(mesh)
