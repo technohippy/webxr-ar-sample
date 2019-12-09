@@ -15,7 +15,6 @@
 			var container;
 			var camera, scene, renderer;
 			var controller
-            var mesh, position
 
 			var up = new THREE.Vector3( 0, 1, 0 );
 
@@ -57,24 +56,6 @@
 
 
 
-/*
-                const geometry = new THREE.ConeGeometry(0.03, 0.1, 32)
-                const material = new THREE.MeshStandardMaterial( {
-                    color: 0xff0000,
-                    roughness: 0.9,
-                    metalness: 0.0,
-                    side: THREE.DoubleSide
-                } );
-                const localMesh = new THREE.Mesh(geometry, material);
-	            localMesh.frustumCulled = false;
-                localMesh.rotation.x = -Math.PI / 2
-                mesh = new THREE.Group()
-                mesh.add(localMesh)
-                scene.add(mesh)
-*/
-
-
-
 				window.addEventListener( 'resize', onWindowResize, false );
 			}
 
@@ -84,10 +65,10 @@
 				renderer.setSize( window.innerWidth, window.innerHeight );
 			}
 
-            function makeArrow() {
+            function makeArrow(color) {
                 const geometry = new THREE.ConeGeometry(0.03, 0.1, 32)
                 const material = new THREE.MeshStandardMaterial( {
-                    color: 0xff0000,
+                    color: color,
                     roughness: 0.9,
                     metalness: 0.0,
                     side: THREE.DoubleSide
@@ -103,9 +84,7 @@
 			function handleController( controller ) {
                 if (!controller.userData.isSelecting) return;
 
-                //mesh.position.copy(controller.position)
-                //mesh.rotation.copy(controller.rotation)
-                let m = makeArrow()
+                let m = makeArrow(Math.floor(Math.random() * 0xffffff))
                 m.position.copy(controller.position)
                 m.rotation.copy(controller.rotation)
                 scene.add(m)
