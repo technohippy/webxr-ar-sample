@@ -61,9 +61,6 @@
 
 
                 const geometry = new THREE.SphereBufferGeometry(0.1, 32, 32)
-	            position = new THREE.BufferAttribute( new Float32Array(9), 3 );
-	            position.usage = THREE.DynamicDrawUsage;
-                geometry.setAttribute('position', position)
                 const material = new THREE.MeshStandardMaterial( {
                     color: 0xff0000,
                     roughness: 0.9,
@@ -90,8 +87,7 @@
                 if (!controller.userData.isSelecting) return;
 
                 let center = new THREE.Vector3( 0, 0, -0.2 ).applyMatrix4( controller.matrixWorld );
-                center.toArray(position.array)
-                position.needsUpdate = true
+                mesh.position.set(center)
 
                 controller.userData.isSelecting = false
 			}
