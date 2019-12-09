@@ -57,8 +57,7 @@
 
 
 
-
-                //const geometry = new THREE.SphereBufferGeometry(0.05, 32, 32)
+/*
                 const geometry = new THREE.ConeGeometry(0.03, 0.1, 32)
                 const material = new THREE.MeshStandardMaterial( {
                     color: 0xff0000,
@@ -68,15 +67,11 @@
                 } );
                 const localMesh = new THREE.Mesh(geometry, material);
 	            localMesh.frustumCulled = false;
-                localMesh.rotation.x = Math.PI / 2
-                /*
-                mesh = new THREE.Mesh(geometry, material);
-	            mesh.frustumCulled = false;
-                */
+                localMesh.rotation.x = -Math.PI / 2
                 mesh = new THREE.Group()
                 mesh.add(localMesh)
                 scene.add(mesh)
-
+*/
 
 
 
@@ -89,13 +84,31 @@
 				renderer.setSize( window.innerWidth, window.innerHeight );
 			}
 
+            function makeArrow() {
+                const geometry = new THREE.ConeGeometry(0.03, 0.1, 32)
+                const material = new THREE.MeshStandardMaterial( {
+                    color: 0xff0000,
+                    roughness: 0.9,
+                    metalness: 0.0,
+                    side: THREE.DoubleSide
+                } );
+                const localMesh = new THREE.Mesh(geometry, material);
+	            localMesh.frustumCulled = false;
+                localMesh.rotation.x = -Math.PI / 2
+                const m = new THREE.Group()
+                m.add(localMesh)
+                return m
+            }
+
 			function handleController( controller ) {
                 if (!controller.userData.isSelecting) return;
 
-                let center = new THREE.Vector3( 0, 0, -0.2 ).applyMatrix4( controller.matrixWorld );
-                //mesh.position.copy(center)
-                mesh.position.copy(controller.position)
-                mesh.rotation.copy(controller.rotation)
+                //mesh.position.copy(controller.position)
+                //mesh.rotation.copy(controller.rotation)
+                let m = makeArrow()
+                m.position.copy(controller.position)
+                m.rotation.copy(controller.rotation)
+                scene.add(m)
 
                 controller.userData.isSelecting = false
 			}
