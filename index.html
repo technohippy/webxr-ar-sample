@@ -35,7 +35,7 @@
 				renderer = new THREE.WebGLRenderer( { antialias: true, alpha: true } );
 				renderer.setPixelRatio( window.devicePixelRatio );
 				renderer.setSize( window.innerWidth, window.innerHeight );
-				renderer.xr.enabled = true;
+//				renderer.xr.enabled = true;
 				container.appendChild( renderer.domElement );
 
 				document.body.appendChild( ARButton.createButton( renderer ) );
@@ -50,10 +50,11 @@
 					this.userData.isSelecting = true;
 				}
 
+/*
 				controller = renderer.xr.getController( 0 );
 				controller.addEventListener( 'selectend', onSelectEnd );
 				scene.add( controller );
-
+*/
 
 
 
