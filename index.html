@@ -58,7 +58,8 @@
 
 
 
-                const geometry = new THREE.SphereBufferGeometry(0.05, 32, 32)
+                //const geometry = new THREE.SphereBufferGeometry(0.05, 32, 32)
+                const geometry = new THREE.ConeGeometry(0.03, 0.1, 32)
                 const material = new THREE.MeshStandardMaterial( {
                     color: 0xff0000,
                     roughness: 0.9,
@@ -86,6 +87,7 @@
                 let center = new THREE.Vector3( 0, 0, -0.2 ).applyMatrix4( controller.matrixWorld );
                 //mesh.position.copy(center)
                 mesh.position.copy(controller.position)
+                mesh.rotation.copy(controller.rotation)
 
                 controller.userData.isSelecting = false
 			}
