@@ -12,7 +12,6 @@
 			import * as THREE from './jsm/three.module.js';
 			import { ARButton } from './jsm/ARButton.js';
 
-			var container;
 			var camera, scene, renderer;
 			var controller
 
@@ -22,8 +21,8 @@
 			animate();
 
 			function init() {
-				container = document.createElement( 'div' );
-				document.body.appendChild( container );
+				const container = document.createElement( 'div' );
+				document.body.appendChild(container);
 
 				scene = new THREE.Scene();
 
@@ -35,7 +34,8 @@
 				renderer.setPixelRatio( window.devicePixelRatio );
 				renderer.setSize( window.innerWidth, window.innerHeight );
 				renderer.xr.enabled = true;
-				container.appendChild( renderer.domElement );
+				//container.appendChild( renderer.domElement );
+                document.body.appendChild(renderer.domElement)
 
 				document.body.appendChild( ARButton.createButton( renderer ) );
 
