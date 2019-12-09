@@ -61,7 +61,7 @@
 
 
                 const geometry = new THREE.SphereBufferGeometry(0.1, 32, 32)
-	            position = new THREE.BufferAttribute( new Float32Array(3), 3 );
+	            position = new THREE.BufferAttribute( new Float32Array(9), 3 );
 	            position.usage = THREE.DynamicDrawUsage;
                 geometry.setAttribute('position', position)
                 const material = new THREE.MeshStandardMaterial( {
