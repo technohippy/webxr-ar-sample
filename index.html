@@ -63,10 +63,18 @@
                 const material = new THREE.MeshStandardMaterial( {
                     color: 0xff0000,
                     roughness: 0.9,
-                    metalness: 0.0
+                    metalness: 0.0,
+                    side: THREE.DoubleSide
                 } );
+                const localMesh = new THREE.Mesh(geometry, material);
+	            localMesh.frustumCulled = false;
+                localMesh.rotation.x = Math.PI / 2
+                /*
                 mesh = new THREE.Mesh(geometry, material);
 	            mesh.frustumCulled = false;
+                */
+                mesh = new Group()
+                mesh.add(localMesh)
                 scene.add(mesh)
 
 
