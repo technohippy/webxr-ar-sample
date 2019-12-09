@@ -74,7 +74,9 @@
 
         // 5. コントローラーのposition, rotationプロパティを使用して
         //    AR空間内での端末の座標を取得し、メッシュに適用する
-        mesh.position.set(0, 0, -0.2).applyMatrix4(controller.matrixWorld);
+        const position = new THREE.Vector3(0, 0, -0.2);
+        position.applyMatrix4(controller.matrixWorld);
+        mesh.position.copy(position)
         //mesh.position.copy(controller.position)
         mesh.rotation.copy(controller.rotation)
 
