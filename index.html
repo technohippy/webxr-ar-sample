@@ -12,8 +12,8 @@
 			import * as THREE from './jsm/three.module.js';
 			import { ARButton } from './jsm/ARButton.js';
 
-			var camera, scene, renderer;
-			var controller
+			let camera, scene, renderer;
+			let controller
 
 			init();
 			animate();
@@ -21,73 +21,68 @@
 			function init() {
 				scene = new THREE.Scene();
 
-				camera = new THREE.PerspectiveCamera( 70, window.innerWidth / window.innerHeight, 0.01, 20 );
+				camera = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 0.01, 20);
 
-				renderer = new THREE.WebGLRenderer( { antialias: true, alpha: true } );
-				renderer.setPixelRatio( window.devicePixelRatio );
-				renderer.setSize( window.innerWidth, window.innerHeight );
+				//renderer = new THREE.WebGLRenderer({antialias: true, alpha: true});
+				renderer = new THREE.WebGLRenderer({alpha: true});
+				renderer.setPixelRatio(window.devicePixelRatio);
+				renderer.setSize(window.innerWidth, window.innerHeight);
 				renderer.xr.enabled = true;
                 document.body.appendChild(renderer.domElement)
-				document.body.appendChild( ARButton.createButton( renderer ) );
+				document.body.appendChild(ARButton.createButton(renderer));
 
-				var light = new THREE.HemisphereLight( 0xffffff, 0xbbbbff, 1 );
-				light.position.set( 0, 1, 0 );
-				scene.add( light );
+				let light = new THREE.HemisphereLight(0xffffff, 0xbbbbff, 1);
+				light.position.set(0, 1, 0);
+				scene.add(light);
 
-				function onSelectEnd() {
-					this.userData.isSelecting = true;
-				}
+				controller = renderer.xr.getController(0);
+                controller.addEventListener('selectend', () => {
+					controller.userData.isSelecting = true;
+                });
 
-				controller = renderer.xr.getController( 0 );
-				controller.addEventListener( 'selectend', onSelectEnd );
-				//scene.add( controller );
-
-
-
-
-				window.addEventListener( 'resize', onWindowResize, false );
+				window.addEventListener('resize', onWindowResize, false);
 			}
 
 			function onWindowResize() {
 				camera.aspect = window.innerWidth / window.innerHeight;
 				camera.updateProjectionMatrix();
-				renderer.setSize( window.innerWidth, window.innerHeight );
+				renderer.setSize(window.innerWidth, window.innerHeight);
 			}
 
             function makeArrow(color) {
                 const geometry = new THREE.ConeGeometry(0.03, 0.1, 32)
-                const material = new THREE.MeshStandardMaterial( {
+                const material = new THREE.MeshStandardMaterial({
                     color: color,
                     roughness: 0.9,
                     metalness: 0.0,
                     side: THREE.DoubleSide
-                } );
+                });
                 const localMesh = new THREE.Mesh(geometry, material);
 	            localMesh.frustumCulled = false;
                 localMesh.rotation.x = -Math.PI / 2
-                const m = new THREE.Group()
-                m.add(localMesh)
-                return m
+                const mesh = new THREE.Group()
+                mesh.add(localMesh)
+                return mesh
             }
 
-			function handleController( controller ) {
+			function handleController(controller) {
                 if (!controller.userData.isSelecting) return;
 
-                let m = makeArrow(Math.floor(Math.random() * 0xffffff))
-                m.position.copy(controller.position)
-                m.rotation.copy(controller.rotation)
-                scene.add(m)
+                const mesh = makeArrow(Math.floor(Math.random() * 0xffffff))
+                mesh.position.copy(controller.position)
+                mesh.rotation.copy(controller.rotation)
+                scene.add(mesh)
 
                 controller.userData.isSelecting = false
 			}
 
 			function animate() {
-				renderer.setAnimationLoop( render );
+				renderer.setAnimationLoop(render);
 			}
 
 			function render() {
-				handleController( controller );
-				renderer.render( scene, camera );
+				handleController(controller);
+				renderer.render(scene, camera);
 			}
 		</script>
 	</body>
