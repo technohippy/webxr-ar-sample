@@ -1,89 +1,95 @@
 <!DOCTYPE html>
 <html lang="en">
-	<head>
-		<title>three.js ar</title>
-		<meta charset="utf-8">
-		<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-		<link type="text/css" rel="stylesheet" href="main.css">
-	</head>
-	<body>
-		<script type="module">
+  <head>
+    <title>three.js ar</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <link type="text/css" rel="stylesheet" href="main.css">
+  </head>
+  <body>
+    <script type="module">
+      import * as THREE from './jsm/three.module.js';
+      import { ARButton } from './jsm/ARButton.js';
 
-			import * as THREE from './jsm/three.module.js';
-			import { ARButton } from './jsm/ARButton.js';
+      let camera, scene, renderer;
+      let controller;
 
-			let camera, scene, renderer;
-			let controller
+      init();
+      animate();
 
-			init();
-			animate();
+      function init() {
 
-			function init() {
-				scene = new THREE.Scene();
+        // 1. レンダラーのalphaオプションをtrueにする
+        renderer = new THREE.WebGLRenderer({antialias: true, alpha: true});
 
-				camera = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 0.01, 20);
+        renderer.setPixelRatio(window.devicePixelRatio);
+        renderer.setSize(window.innerWidth, window.innerHeight);
 
-				//renderer = new THREE.WebGLRenderer({antialias: true, alpha: true});
-				renderer = new THREE.WebGLRenderer({alpha: true});
-				renderer.setPixelRatio(window.devicePixelRatio);
-				renderer.setSize(window.innerWidth, window.innerHeight);
-				renderer.xr.enabled = true;
-                document.body.appendChild(renderer.domElement)
-				document.body.appendChild(ARButton.createButton(renderer));
+        // 2. レンダラーのXR機能を有効にする
+        renderer.xr.enabled = true;
 
-				let light = new THREE.HemisphereLight(0xffffff, 0xbbbbff, 1);
-				light.position.set(0, 1, 0);
-				scene.add(light);
+        document.body.appendChild(renderer.domElement);
 
-				controller = renderer.xr.getController(0);
-                controller.addEventListener('selectend', () => {
-					controller.userData.isSelecting = true;
-                });
+        // 3. AR表示を有効にするためのボタンを画面に追加する
+        document.body.appendChild(ARButton.createButton(renderer));
 
-				window.addEventListener('resize', onWindowResize, false);
-			}
+        scene = new THREE.Scene();
+        let light = new THREE.HemisphereLight(0xffffff, 0xbbbbff, 1);
+        light.position.set(0, 1, 0);
+        scene.add(light);
 
-			function onWindowResize() {
-				camera.aspect = window.innerWidth / window.innerHeight;
-				camera.updateProjectionMatrix();
-				renderer.setSize(window.innerWidth, window.innerHeight);
-			}
+        camera = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 0.01, 20);
+        window.addEventListener('resize', () => {
+          camera.aspect = window.innerWidth / window.innerHeight;
+          camera.updateProjectionMatrix();
+          renderer.setSize(window.innerWidth, window.innerHeight);
+        }, false);
 
-            function makeArrow(color) {
-                const geometry = new THREE.ConeGeometry(0.03, 0.1, 32)
-                const material = new THREE.MeshStandardMaterial({
-                    color: color,
-                    roughness: 0.9,
-                    metalness: 0.0,
-                    side: THREE.DoubleSide
-                });
-                const localMesh = new THREE.Mesh(geometry, material);
-	            //localMesh.frustumCulled = false;
-                localMesh.rotation.x = -Math.PI / 2
-                const mesh = new THREE.Group()
-                mesh.add(localMesh)
-                return mesh
-            }
+        // 4. XRセッションにアクセスするためコントローラーを取得する
+        controller = renderer.xr.getController(0);
+        controller.addEventListener('selectend', () => {
+          controller.userData.isSelecting = true;
+        });
+      }
 
-			function handleController(controller) {
-                if (!controller.userData.isSelecting) return;
+      function makeArrow(color) {
+        const geometry = new THREE.ConeGeometry(0.03, 0.1, 32)
+        const material = new THREE.MeshStandardMaterial({
+          color: color,
+          roughness: 0.9,
+          metalness: 0.0,
+          side: THREE.DoubleSide
+        });
+        const localMesh = new THREE.Mesh(geometry, material);
+        localMesh.rotation.x = -Math.PI / 2
+        const mesh = new THREE.Group()
+        mesh.add(localMesh)
+        return mesh
+      }
 
-                const mesh = makeArrow(Math.floor(Math.random() * 0xffffff))
-                mesh.position.copy(controller.position)
-                mesh.rotation.copy(controller.rotation)
-                scene.add(mesh)
+      function handleController(controller) {
+        if (!controller.userData.isSelecting) return;
 
-                controller.userData.isSelecting = false
-			}
+        const mesh = makeArrow(Math.floor(Math.random() * 0xffffff))
 
-			function animate() {
-				renderer.setAnimationLoop(render);
-			}
+        // 5. コントローラーのposition, rotationプロパティを使用して
+        //    AR空間内の座標を取得し、メッシュに適用する
+        mesh.position.copy(controller.position)
+        mesh.rotation.copy(controller.rotation)
 
-			function render() {
-				handleController(controller);
-				renderer.render(scene, camera);
-			}
-		</script>
-	</body>
+        scene.add(mesh)
+
+        controller.userData.isSelecting = false
+      }
+
+      function animate() {
+        renderer.setAnimationLoop(render);
+      }
+
+      function render() {
+        handleController(controller);
+        renderer.render(scene, camera);
+      }
+    </script>
+  </body>
 </html>
