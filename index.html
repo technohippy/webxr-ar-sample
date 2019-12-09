@@ -54,14 +54,17 @@
 
 
 
-                const geometry = new THREE.SphereBufferGeometry(0.1, 32, 32)
-	            position = new THREE.BufferAttribute( new Float32Array(3), 3 );
-                geometry.setAttribute('position', position)
-                //const material = new THREE.MeshBasicMaterial({color: 0xffff00})
+                //const geometry = new THREE.SphereBufferGeometry(0.1, 32, 32)
+	            //position = new THREE.BufferAttribute( new Float32Array(3), 3 );
+                //geometry.setAttribute('position', position)
+                const geometry = new THREE.SphereGeometry(0.1, 32, 32)
+                const material = new THREE.MeshBasicMaterial({color: 0xffff00})
+                /*
                 const material = new THREE.MeshStandardMaterial( {
                     roughness: 0.9,
                     metalness: 0.0
                 } );
+                */
                 mesh = new THREE.Mesh(geometry, material);
 	            mesh.frustumCulled = false;
                 scene.add(mesh)
@@ -81,8 +84,8 @@
 			function handleController( controller ) {
                 if (!controller.userData.isSelecting) return;
 
-                let center = new THREE.Vector3( 0, 0, - 0.2 ).applyMatrix4( controller.matrixWorld );
                 /*
+                let center = new THREE.Vector3( 0, 0, -0.2 ).applyMatrix4( controller.matrixWorld );
                 const geometry = new THREE.SphereGeometry(0.1, 32, 32)
                 //const material = new THREE.MeshBasicMaterial({color: 0xffff00})
                 const material = new MeshStandardMaterial( {
@@ -91,11 +94,20 @@
                 } );
                 const mesh = new THREE.Mesh(geometry, material);
 	            mesh.frustumCulled = false;
+                mesh.position.set(center)
                 scene.add(mesh)
                 */
-                //mesh.position.set(center)
+
+
+                let center = new THREE.Vector3( 0, 0, -0.2 ).applyMatrix4( controller.matrixWorld );
+                mesh.position.set(center)
+
+
+                /*
+                let center = new THREE.Vector3( 0, 0, -0.2 ).applyMatrix4( controller.matrixWorld );
                 center.toArray(position.array)
                 position.needsUpdate = true
+                */
 
                 controller.userData.isSelecting = false
 			}
