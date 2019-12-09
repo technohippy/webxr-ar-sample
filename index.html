@@ -84,8 +84,8 @@
                 if (!controller.userData.isSelecting) return;
 
                 let center = new THREE.Vector3( 0, 0, -0.2 ).applyMatrix4( controller.matrixWorld );
-                //mesh.position.set(center)
-                mesh.position.set(controller.position)
+                mesh.position.copy(center)
+                //mesh.position.copy(controller.position)
 
                 controller.userData.isSelecting = false
 			}
