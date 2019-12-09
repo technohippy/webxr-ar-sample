@@ -60,8 +60,7 @@
                 //const material = new THREE.MeshBasicMaterial({color: 0xffff00})
                 const material = new THREE.MeshStandardMaterial( {
                     roughness: 0.9,
-                    metalness: 0.0,
-		            vertexColors: VertexColors
+                    metalness: 0.0
                 } );
                 const mesh = new THREE.Mesh(geometry, material);
 	            mesh.frustumCulled = false;
