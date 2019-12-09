@@ -58,7 +58,7 @@
                     side: THREE.DoubleSide
                 });
                 const localMesh = new THREE.Mesh(geometry, material);
-	            localMesh.frustumCulled = false;
+	            //localMesh.frustumCulled = false;
                 localMesh.rotation.x = -Math.PI / 2
                 const mesh = new THREE.Group()
                 mesh.add(localMesh)
