@@ -73,8 +73,9 @@
         const mesh = makeArrow(Math.floor(Math.random() * 0xffffff))
 
         // 5. コントローラーのposition, rotationプロパティを使用して
-        //    AR空間内の座標を取得し、メッシュに適用する
-        mesh.position.copy(controller.position)
+        //    AR空間内での端末の座標を取得し、メッシュに適用する
+        mesh.position.set(0, 0, -0.2).applyMatrix4(controller.matrixWorld);
+        //mesh.position.copy(controller.position)
         mesh.rotation.copy(controller.rotation)
 
         scene.add(mesh)
