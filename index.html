@@ -15,6 +15,7 @@
 			var container;
 			var camera, scene, renderer;
 			var controller
+            var position
 
 			var up = new THREE.Vector3( 0, 1, 0 );
 
@@ -53,14 +54,15 @@
 
 
 
-                const geometry = new THREE.SphereGeometry(0.1, 32, 32)
-                const material = new THREE.MeshBasicMaterial({color: 0xffff00})
-                /*
+                const geometry = new THREE.SphereBufferGeometry(0.1, 32, 32)
+	            position = new BufferAttribute( new Float32Array(3), 3 );
+                geometry.setAttribute('position', position)
+                //const material = new THREE.MeshBasicMaterial({color: 0xffff00})
                 const material = new MeshStandardMaterial( {
                     roughness: 0.9,
-                    metalness: 0.0
+                    metalness: 0.0,
+		            vertexColors: VertexColors
                 } );
-                */
                 const mesh = new THREE.Mesh(geometry, material);
 	            mesh.frustumCulled = false;
                 scene.add(mesh)
@@ -92,7 +94,9 @@
 	            mesh.frustumCulled = false;
                 scene.add(mesh)
                 */
-                mesh.position.set(center)
+                //mesh.position.set(center)
+                center.ToArray(position.array)
+                mesh.updateGeometry()
 
                 controller.userData.isSelecting = false
 			}
